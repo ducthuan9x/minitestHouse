@@ -3,6 +3,8 @@ package com.example.minitesthouse.service;
 import com.example.minitesthouse.model.House;
 import com.example.minitesthouse.repository.IHouseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -10,8 +12,8 @@ import java.util.Optional;
 public class HouseService implements IHouseService{
     @Autowired
     IHouseRepository houseRepository;
-    public Iterable<House> findAll() {
-        return houseRepository.findAll();
+    public Page<House> findAll(Pageable pageable) {
+        return houseRepository.findAll(pageable);
     }
 
     public Optional<House> findById(Long id) {

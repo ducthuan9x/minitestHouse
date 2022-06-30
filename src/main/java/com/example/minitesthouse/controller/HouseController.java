@@ -27,8 +27,8 @@ public class HouseController {
     @Autowired
     IHouseService houseService;
     @GetMapping
-    public ResponseEntity<Iterable<House>> findAllHouse() {
-        List<House> houses = (List<House>) houseService.findAll();
+    public ResponseEntity<Page<House>> findAllHouse(@PageableDefault(value = 3) Pageable pageable) {
+        Page<House> houses =  houseService.findAll(pageable);
         if (houses.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }

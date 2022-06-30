@@ -92,6 +92,7 @@
                 </tbody>
             </table>
         </div>
+        <div id="pagable"></div>
     </div>
 </div>
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -130,15 +131,27 @@
     let house=document.getElementById("list");
     // let searchName= document.getElementById("search-name");
     let addForm=document.getElementById("addForm");
-    loaddataHouse()
-    function loaddataHouse() {
+    let pagable = document.getElementById("pagable")
+    loaddataHouse(0)
+    function loaddataHouse(number) {
         $.ajax({
             type: "GET",
-            url:"http://localhost:8081/api/houses",
+            url:"http://localhost:8081/api/houses?page="+number,
             success: function (list) {
-                loadtable(list);
+                loadtable(list.content);
+                let str = ""
+                let num =list.pageable.pageNumber
+                console.log(num)
+                if(num > 0 || num+1 === list.totalPages) {
+                    str += `<button onclick="loaddataHouse(${num-1})">Trước</button>`
+                }
+                str += `${num+1}/${list.totalPages}`
+                if(num <= 0 || num+1 !== list.totalPages) {
+                    str += `<button onclick="loaddataHouse(${num+1})">Sau</button>`
+                }
+                pagable.innerHTML = str
             }
-        })
+        });
     }
 
     function loadtable(list){
@@ -183,6 +196,32 @@
             }
         })
     }
+
+    //
+    // findAll(0);
+    // function findAll(number) {
+    //     let pagable = document.getElementById("pagable")
+    //     $.ajax({
+    //         type: "GET",
+    //         url: "http://localhost:8081/api/houses?page="+number,
+    //         success: function (data) {
+    //             console.log(data)
+    //             dislpay(data.content);
+    //             let str = ""
+    //             let num = data.pageable.pageNumber
+    //             console.log(num)
+    //             if(num > 0 || num+1 === data.totalPages) {
+    //                 str += `<button onclick="findAll(${num-1})">Trước</button>`
+    //             }
+    //             str += `${num+1}/${data.totalPages}`
+    //             if(num <= 0 || num+1 !== data.totalPages) {
+    //                 str += `<button onclick="findAll(${num+1})">Sau</button>`
+    //             }
+    //             pagable.innerHTML = str
+    //         }
+    //     });
+    // }
+
 </script>
 
 
